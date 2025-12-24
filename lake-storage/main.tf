@@ -54,6 +54,9 @@ resource "azurerm_role_assignment" "role_assignment" {
 
 # Sets up diagnostic logging for the storage account, sending logs to Log Analytics
 resource "azurerm_monitor_diagnostic_setting" "default_settings" {
+  
+  count = length(var.log_analytics_workspace_id) > 0 ? 1 : 0
+
   name                       = format("default-storage-%s", var.storage_account_name)
   target_resource_id         = azurerm_storage_account.this.id
   log_analytics_workspace_id = var.log_analytics_workspace_id
