@@ -1,4 +1,4 @@
-# Creates an Azure Storage Account resource
+.# Creates an Azure Storage Account resource
 resource "azurerm_storage_account" "this" {
   name                     = var.storage_account_name
   resource_group_name      = var.resource_group_name
@@ -57,6 +57,7 @@ resource "azurerm_monitor_diagnostic_setting" "default_settings" {
   
   count = length(var.log_analytics_workspace_id) > 0 ? 1 : 0
 
+
   name                       = format("default-storage-%s", var.storage_account_name)
   target_resource_id         = azurerm_storage_account.this.id
   log_analytics_workspace_id = var.log_analytics_workspace_id
@@ -73,6 +74,8 @@ resource "azurerm_monitor_diagnostic_setting" "default_settings" {
 
 # Configures diagnostic settings for Blob services within the storage account
 resource "azurerm_monitor_diagnostic_setting" "default_settings_blob" {
+count = length(var.log_analytics_workspace_id) > 0 ? 1 : 0
+
   name                       = format("default-blob-%s", var.storage_account_name)
   target_resource_id         = format("%s/blobServices/default", azurerm_storage_account.this.id)
   log_analytics_workspace_id = var.log_analytics_workspace_id
